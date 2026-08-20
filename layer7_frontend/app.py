@@ -66,22 +66,30 @@ with st.sidebar:
         "https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Python-Dark.svg",
         width=48,
     )
-    st.title("Settings")
-    api_base = st.text_input(
+    # Retrieve API URL from st.secrets, os.environ, or fallback
+    default_api_url = "http://localhost:8000"
+    if hasattr(st, "secrets"):
+        default_api_url = st.secrets.get("API_BASE_URL", st.secrets.get("API_BASE", default_api_url))
+    if default_api_url == "http://localhost:8000":
+        default_api_url = os.environ.get("API_BASE_URL", os.environ.get("API_BASE", default_api_url))
+
+    api_base_input = st.text_input(
         "FastAPI Backend URL",
-        value=os.environ.get("API_BASE_URL", "http://localhost:8000"),
+        value=default_api_url,
         help="Endpoint where layer6_api is running.",
     )
+    api_base = api_base_input.strip().rstrip("/")
 
     # Health check
     try:
-        health_resp = requests.get(f"{api_base}/health", timeout=1.5)
+        health_resp = requests.get(f"{api_base}/health", timeout=5.0)
         if health_resp.status_code == 200:
             st.success("🟢 API Connected", icon="✅")
         else:
             st.warning(f"🟡 API responded with status {health_resp.status_code}")
-    except Exception:
-        st.error("🔴 API Offline\nStart with: `uvicorn layer6_api.main:app`")
+    except Exception as e:
+        st.error(f"🔴 API Offline\nCould not connect to `{api_base}`\n({e})")
+
 
     st.markdown("---")
     st.markdown("### 📚 Evaluation Scope")
