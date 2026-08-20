@@ -1,0 +1,33 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: layer8_deployment/Dockerfile.api
+    container_name: se_assistant_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - chroma_data:/app/layer1_data/chroma_store
+      - decisions_data:/app/layer6_api
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: layer8_deployment/Dockerfile.frontend
+    container_name: se_assistant_frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://api:8000
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  chroma_data:
+  decisions_data:

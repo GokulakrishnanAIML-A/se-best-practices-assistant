@@ -1,0 +1,37 @@
+[
+  {
+    "id": "google_eng_practices_0000",
+    "source": "google_eng_practices",
+    "title": "Google Engineering Practices — Code Review and Quality Guidelines",
+    "text": "# Google Engineering Practices — Code Review and Quality Guidelines\n\nAuthoritative guidelines from Google Engineering Practices on software design, code review standards, and change list hygiene.",
+    "url": ""
+  },
+  {
+    "id": "google_eng_practices_0001",
+    "source": "google_eng_practices",
+    "title": "Small and Focused Changes",
+    "text": "## Small and Focused Changes\n\nChanges should be small, self-contained, and focused on a single logical improvement.\n- **Guideline:** Small changes are reviewed faster, result in higher quality reviews, contain fewer bugs, and are easier to revert if problems occur. A change should ideally be between 50 to 200 lines of code.\n- **Violation Indicators:** Large, kitchen-sink pull requests mixing refactoring, feature additions, bug fixes, and reformatting into a single commit; changes affecting dozens of unrelated files.\n- **Remediation:** Split large changes into a sequence of smaller, logically coherent changes (e.g., first refactor the interface in PR #1, then implement the new feature in PR #2).\n- **Citation:** Google Engineering Practices — Small Changes.",
+    "url": ""
+  },
+  {
+    "id": "google_eng_practices_0002",
+    "source": "google_eng_practices",
+    "title": "Design Simplicity and Over-Engineering",
+    "text": "## Design Simplicity and Over-Engineering\n\nSoftware design should solve the current problem cleanly without introducing premature generalizations or unnecessary abstraction layers.\n- **Guideline:** Keep the design simple and direct. Do not add speculative features or complex extensibility hooks for requirements that do not currently exist (You Aren't Gonna Need It — YAGNI).\n- **Violation Indicators:** Excessive layers of indirection (e.g., a controller delegating to a manager, delegating to a provider, delegating to a handler, for a simple CRUD operation), unused generic parameters, factory classes that only produce one hardcoded instance.\n- **Remediation:** Remove superfluous abstractions. Make the implementation obvious and direct. Refactor to introduce abstractions only when concrete extension needs emerge.\n- **Citation:** Google Engineering Practices — Design Simplicity.",
+    "url": ""
+  },
+  {
+    "id": "google_eng_practices_0003",
+    "source": "google_eng_practices",
+    "title": "Thorough Automated Test Coverage",
+    "text": "## Thorough Automated Test Coverage\n\nCode changes must include comprehensive, reliable automated unit and integration tests.\n- **Guideline:** Tests should verify both the happy path and edge cases/failure conditions. Tests should be isolated, deterministic, and maintainable.\n- **Violation Indicators:** New functions or classes added without corresponding unit tests; tests that rely on external network/timing dependencies causing flakiness; tests that only assert `True` without verifying business outputs.\n- **Remediation:** Author tests that cover expected inputs, boundaries, invalid inputs, and error paths. Use test doubles/fakes for external boundaries.\n- **Citation:** Google Engineering Practices — Testing Standards.",
+    "url": ""
+  },
+  {
+    "id": "google_eng_practices_0004",
+    "source": "google_eng_practices",
+    "title": "Documentation and Meaningful Comments",
+    "text": "## Documentation and Meaningful Comments\n\nComments should explain *why* something is done, not *what* the code is doing. The code itself should clearly show what is being done.\n- **Guideline:** Document architectural decisions, non-obvious algorithms, edge cases, and external constraints. Public APIs must have clear docstrings specifying arguments, return types, and exceptions raised.\n- **Violation Indicators:** Redundant comments that merely restate the code line (`i += 1  # increment i`), missing docstrings on public modules and API endpoints, or stale comments that contradict the code.\n- **Remediation:** Delete obvious/noisy comments. Update comments to explain business rationale or obscure technical constraints.\n- **Citation:** Google Engineering Practices — Writing Good Comments.",
+    "url": ""
+  }
+]

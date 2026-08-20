@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+*.egg-info/
+
+# Secrets & Keys
+.env
+.streamlit/secrets.toml
+
+# Data stores (large, regenerated at startup)
+layer1_data/chroma_store/
+layer1_data/bm25_store.pkl
+layer1_data/chunks/
+layer6_api/decisions.jsonl
+layer5_evaluation/results.csv
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log

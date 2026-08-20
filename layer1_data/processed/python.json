@@ -1,0 +1,30 @@
+[
+  {
+    "id": "python_0000",
+    "source": "python",
+    "title": "PEP 8 — Style Guide for Python Code",
+    "text": "# PEP 8 — Style Guide for Python Code\n\nAuthoritative reference standards for Pythonic code style, conventions, and idiomatic practices.",
+    "url": ""
+  },
+  {
+    "id": "python_0001",
+    "source": "python",
+    "title": "Naming Conventions",
+    "text": "## Naming Conventions\n\nFollow standard Python naming conventions across identifiers.\n- **Rules:**\n  - Classes: `CapWords` (PascalCase), e.g., `OrderProcessor`, `UserAccount`.\n  - Functions and Methods: `snake_case` (lowercase with words separated by underscores), e.g., `calculate_tax()`, `get_user_by_id()`.\n  - Variables: `snake_case`, e.g., `total_amount`, `retry_count`.\n  - Constants: `ALL_CAPS_SNAKE_CASE` (uppercase with words separated by underscores), e.g., `MAX_RETRY_ATTEMPTS`, `DEFAULT_TIMEOUT`.\n  - Private attributes/methods: Leading single underscore `_internal_method` or `_helper`.\n- **Violation Indicators:** CamelCase variable or function names (`getUserData()`), uppercase variable names for mutable instances, mixed styles.\n- **Citation:** Python Software Foundation — PEP 8: Naming Conventions.",
+    "url": ""
+  },
+  {
+    "id": "python_0002",
+    "source": "python",
+    "title": "Imports Formatting and Organization",
+    "text": "## Imports Formatting and Organization\n\nImports should always be on separate lines and grouped into three distinct sections separated by a blank line.\n- **Rules:**\n  1. Standard library imports (e.g., `import os`, `import sys`).\n  2. Related third party imports (e.g., `import requests`, `import pydantic`).\n  3. Local application/library specific imports (e.g., `from layer1_data.types import Chunk`).\n  - Avoid wildcard imports (`from module import *`) because they pollute the namespace and obscure symbol origin.\n- **Violation Indicators:** Wildcard imports, single-line comma-separated module imports (`import os, sys, json`), mixed unordered standard and third-party imports.\n- **Citation:** Python Software Foundation — PEP 8: Imports.",
+    "url": ""
+  },
+  {
+    "id": "python_0003",
+    "source": "python",
+    "title": "Idiomatic Python Comparisons and Boolean Evaluation",
+    "text": "## Idiomatic Python Comparisons and Boolean Evaluation\n\nLeverage Python's idiomatic expressions for equality, identity, and sequence truthiness.\n- **Rules:**\n  - Compare singletons like `None` and booleans using identity `is` or `is not`, never `== None` or `== True`.\n  - Check sequence emptiness using `if not seq:` instead of `if len(seq) == 0:` or `if seq == []:`.\n  - Catch specific exception classes (`except ValueError:`) instead of bare `except:`.\n- **Violation Indicators:** `if val == None:`, `if flag == True:`, `if len(items) == 0:`, bare `except:` clauses.\n- **Citation:** Python Software Foundation — PEP 8: Programming Recommendations.",
+    "url": ""
+  }
+]

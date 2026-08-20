@@ -1,0 +1,51 @@
+[
+  {
+    "id": "clean_code_0000",
+    "source": "clean_code",
+    "title": "Clean Code Principles and Maintainability Guidelines",
+    "text": "# Clean Code Principles and Maintainability Guidelines\n\nAuthoritative reference summaries for writing readable, maintainable, and robust software.",
+    "url": ""
+  },
+  {
+    "id": "clean_code_0001",
+    "source": "clean_code",
+    "title": "Meaningful Names and Intention-Revealing Identifiers",
+    "text": "## Meaningful Names and Intention-Revealing Identifiers\n\nVariable, function, and class names must reveal their intent, context, and purpose without needing explanatory comments.\n- **Violation Indicators:** Single-letter variables outside short loop indices (e.g., `d`, `tmp`, `val`, `data`, `res`), cryptic abbreviations, misleading names that do not match variable types, encoding type or scope into names (Hungarian notation), or naming classes with generic suffixes like `DataHolder` or `DoHelper`.\n- **Remediation:** Choose names that answer why it exists, what it does, and how it is used (e.g., `elapsed_time_in_days` instead of `d`, `unpaid_invoices` instead of `list1`).\n- **Citation:** Robert C. Martin, Clean Code — Chapter 2: Meaningful Names.",
+    "url": ""
+  },
+  {
+    "id": "clean_code_0002",
+    "source": "clean_code",
+    "title": "Small Functions and Single Level of Abstraction (SLA)",
+    "text": "## Small Functions and Single Level of Abstraction (SLA)\n\nFunctions should be small (ideally under 20–30 lines), do exactly one thing, and do it well. Statements within a function should all be at the same level of abstraction.\n- **Violation Indicators:** Functions longer than 40–50 lines, functions containing deep nested loops or conditionals (nesting depth > 3), mixing high-level business orchestration with low-level string manipulation or raw SQL queries.\n- **Remediation:** Extract paragraphs and conditional blocks into separate, descriptive helper functions. Keep functions to one level of abstraction below their stated purpose.\n- **Citation:** Robert C. Martin, Clean Code — Chapter 3: Functions.",
+    "url": ""
+  },
+  {
+    "id": "clean_code_0003",
+    "source": "clean_code",
+    "title": "Function Arguments and Command-Query Separation (CQS)",
+    "text": "## Function Arguments and Command-Query Separation (CQS)\n\nFunctions should ideally take 0 to 2 arguments (monadic or dyadic). Triadic functions should be rare, and polyadic functions (> 3 arguments) should be refactored into argument objects. Functions should either do something (command) or answer something (query), but not both.\n- **Violation Indicators:** Functions taking 4 or more positional parameters, boolean flag arguments that cause the function to do two different things depending on the boolean (`process_order(order, is_express=True)`), or functions that mutate state while returning a boolean status.\n- **Remediation:** Encapsulate multiple parameters into dedicated data classes or config objects. Split flag-based functions into two distinct functions (`process_express_order` and `process_standard_order`). Separate commands from queries.\n- **Citation:** Robert C. Martin, Clean Code — Chapter 3: Functions.",
+    "url": ""
+  },
+  {
+    "id": "clean_code_0004",
+    "source": "clean_code",
+    "title": "Don't Repeat Yourself (DRY) and Duplication",
+    "text": "## Don't Repeat Yourself (DRY) and Duplication\n\nEvery piece of knowledge or business logic must have a single, unambiguous, authoritative representation within a system.\n- **Violation Indicators:** Duplicate algorithm blocks, copy-pasted validation checks or database query structures across multiple endpoints or methods, identical business calculations repeated with minor variable name changes.\n- **Remediation:** Centralize shared logic into reusable utility functions, base classes, or middleware components. Parameterize variations cleanly.\n- **Citation:** Andy Hunt & Dave Thomas, The Pragmatic Programmer — DRY Principle.",
+    "url": ""
+  },
+  {
+    "id": "clean_code_0005",
+    "source": "clean_code",
+    "title": "Error Handling and Exception Strategy",
+    "text": "## Error Handling and Exception Strategy\n\nError handling is important, but if it obscures logic, it is wrong. Use exceptions rather than return codes or error flags to separate business logic from error handling.\n- **Violation Indicators:** Returning special error codes (`-1`, `None`, `\"ERROR\"`) that callers must manually check, empty catch/except blocks that swallow exceptions silently (`except Exception: pass`), catch-all exception handling without logging or re-raising, or nested try-catch blocks cluttering core logic.\n- **Remediation:** Throw domain-specific exceptions. Handle exceptions at boundaries or centralized middleware. Never silently swallow exceptions. Use context managers for resource clean-up.\n- **Citation:** Robert C. Martin, Clean Code — Chapter 7: Error Handling.",
+    "url": ""
+  },
+  {
+    "id": "clean_code_0006",
+    "source": "clean_code",
+    "title": "Cyclomatic Complexity and Deep Nesting",
+    "text": "## Cyclomatic Complexity and Deep Nesting\n\nHigh cyclomatic complexity makes code difficult to comprehend, test, and maintain.\n- **Violation Indicators:** Cyclomatic complexity (radon grade C/D/F, CC > 10), deeply nested `if/for/while/try` blocks exceeding a nesting depth of 3 or 4.\n- **Remediation:** Use early returns / guard clauses (`if not condition: return`), extract subroutines, or replace complex switch/case structures with polymorphism or lookup maps.\n- **Citation:** Thomas J. McCabe, Structured Testing: A Testing Methodology Using the Cyclomatic Complexity Metric.",
+    "url": ""
+  }
+]

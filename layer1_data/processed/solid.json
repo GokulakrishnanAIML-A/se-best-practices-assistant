@@ -1,0 +1,44 @@
+[
+  {
+    "id": "solid_0000",
+    "source": "solid",
+    "title": "SOLID Principles for Software Engineering",
+    "text": "# SOLID Principles for Software Engineering\n\nAuthoritative reference guidelines for object-oriented design and architecture.",
+    "url": ""
+  },
+  {
+    "id": "solid_0001",
+    "source": "solid",
+    "title": "Single Responsibility Principle (SRP)",
+    "text": "## Single Responsibility Principle (SRP)\n\nA class or module should have one, and only one, reason to change. Every class should encapsulate a single responsibility or business actor concern.\n- **Violation Indicators:** A class having multiple unrelated duties (e.g., handling business calculation, SQL database persistence, and HTTP/email notification formatting in a single class such as `UserManager` or `OrderProcessor`), classes with excessive method counts (God classes with > 8 methods), or high line counts (> 200 lines).\n- **Remediation:** Extract secondary responsibilities into dedicated collaborating services or helper classes (e.g., separate `UserRepository`, `NotificationService`, and `UserValidator`).\n- **Citation:** Robert C. Martin, SOLID Principles — Single Responsibility.",
+    "url": ""
+  },
+  {
+    "id": "solid_0002",
+    "source": "solid",
+    "title": "Open/Closed Principle (OCP)",
+    "text": "## Open/Closed Principle (OCP)\n\nSoftware entities (classes, modules, functions) should be open for extension, but closed for modification. You should be able to add new functionality without editing existing, tested source code.\n- **Violation Indicators:** Functions or methods with extensive `if/elif/else` chains or `match/switch` statements checking object type/enum codes to execute type-specific behavior (e.g., `calculate_discount(order_type)` modifying the core function whenever a new discount type arrives).\n- **Remediation:** Use polymorphism, strategy patterns, or abstract base classes / protocols. Define an interface and inject concrete strategy implementations.\n- **Citation:** Robert C. Martin, SOLID Principles — Open/Closed.",
+    "url": ""
+  },
+  {
+    "id": "solid_0003",
+    "source": "solid",
+    "title": "Liskov Substitution Principle (LSP)",
+    "text": "## Liskov Substitution Principle (LSP)\n\nSubtypes must be substitutable for their base types without altering the correctness of the program. If class S is a subtype of class T, objects of type T may be replaced with objects of type S without breaking functionality.\n- **Violation Indicators:** Overridden methods in subclasses throwing `NotImplementedError`, returning unexpected dummy values, weakening preconditions, strengthening postconditions, or type-checking subclasses (`isinstance(obj, Subclass)`) in client code.\n- **Remediation:** Ensure subclasses fulfill the entire base contract. If a subclass cannot fulfill the base contract, favor composition over inheritance or refine the abstraction hierarchy.\n- **Citation:** Barbara Liskov, SOLID Principles — Liskov Substitution.",
+    "url": ""
+  },
+  {
+    "id": "solid_0004",
+    "source": "solid",
+    "title": "Interface Segregation Principle (ISP)",
+    "text": "## Interface Segregation Principle (ISP)\n\nClients should not be forced to depend upon interfaces or methods they do not use. Prefer many small, client-specific interfaces over one large, monolithic general-purpose interface.\n- **Violation Indicators:** Fat interfaces where implementing classes leave several methods empty or raise `NotImplementedError` because the interface bundled unrelated capabilities (e.g., a `Worker` interface bundling `code()`, `test()`, `deploy()`, and `hire()`).\n- **Remediation:** Break bloated interfaces into smaller, cohesive role interfaces or mixins (e.g., `Codeable`, `Testable`, `Deployable`).\n- **Citation:** Robert C. Martin, SOLID Principles — Interface Segregation.",
+    "url": ""
+  },
+  {
+    "id": "solid_0005",
+    "source": "solid",
+    "title": "Dependency Inversion Principle (DIP)",
+    "text": "## Dependency Inversion Principle (DIP)\n\nHigh-level modules should not depend on low-level modules; both should depend on abstractions (interfaces or protocols). Abstractions should not depend on details; details should depend on abstractions.\n- **Violation Indicators:** Direct instantiation of concrete database drivers, HTTP clients, or file system handlers inside business logic classes (e.g., `self.db = MySQLClient()` inside an `OrderService.__init__`), making unit testing with mocks impossible.\n- **Remediation:** Introduce abstract interfaces and pass dependencies via constructor injection (Dependency Injection).\n- **Citation:** Robert C. Martin, SOLID Principles — Dependency Inversion.",
+    "url": ""
+  }
+]

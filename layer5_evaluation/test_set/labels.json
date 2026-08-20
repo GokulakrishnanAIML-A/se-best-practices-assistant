@@ -1,0 +1,194 @@
+{
+  "file_01.py": [
+    {
+      "principle": "SRP",
+      "line_range": [8, 48],
+      "description": "UserManager class mixes user credential management, SQL database queries, and HTML email notifications in a single class"
+    },
+    {
+      "principle": "OWASP-Injection",
+      "line_range": [15, 25],
+      "description": "Raw string concatenation of user input directly into dynamic SQL SELECT and INSERT statements"
+    }
+  ],
+  "file_02.py": [
+    {
+      "principle": "DIP",
+      "line_range": [13, 15],
+      "description": "PaymentProcessor directly instantiates concrete third-party SDK client ConcreteStripeClient instead of depending on an abstraction"
+    },
+    {
+      "principle": "OCP",
+      "line_range": [16, 34],
+      "description": "calculate_final_amount relies on rigid if/elif checks for payment method strings rather than polymorphic strategy objects"
+    }
+  ],
+  "file_03.py": [
+    {
+      "principle": "poor-naming",
+      "line_range": [21, 30],
+      "description": "Cryptic single-letter and uninformative identifiers (d, dat, tmp1, res) obscuring variable intent"
+    },
+    {
+      "principle": "LSP",
+      "line_range": [46, 53],
+      "description": "ReadOnlyArchiveStorage subclass violates BaseStorage substitutability by raising NotImplementedError on write and delete"
+    }
+  ],
+  "file_04.py": [
+    {
+      "principle": "ISP",
+      "line_range": [5, 38],
+      "description": "IWorker fat interface bundles development, ops, and HR methods forcing JuniorDeveloper to raise NotImplementedError"
+    },
+    {
+      "principle": "high-complexity",
+      "line_range": [41, 63],
+      "description": "dispatch_task function contains deep nesting depth (> 3) and high cyclomatic complexity (CC > 10)"
+    }
+  ],
+  "file_05.py": [
+    {
+      "principle": "SRP",
+      "line_range": [8, 62],
+      "description": "FinancialReportService mixes raw ledger summation, tax calculation, HTML markup generation, and filesystem I/O"
+    },
+    {
+      "principle": "long-function",
+      "line_range": [9, 62],
+      "description": "generate_monthly_financial_report is a monolithic 54-line function violating single level of abstraction"
+    }
+  ],
+  "file_06.py": [
+    {
+      "principle": "poor-naming",
+      "line_range": [7, 11],
+      "description": "Cryptic identifier naming (h, tmp_val, res1) reducing code readability"
+    },
+    {
+      "principle": "OWASP-Injection",
+      "line_range": [12, 26],
+      "description": "Unsanitized command string execution in subprocess.run and check_output with shell=True allowing command injection"
+    }
+  ],
+  "file_07.py": [
+    {
+      "principle": "OWASP-BrokenAuth",
+      "line_range": [8, 28],
+      "description": "Hardcoded JWT secret key in source code and plaintext password comparison without cryptographic hashing"
+    },
+    {
+      "principle": "DIP",
+      "line_range": [12, 15],
+      "description": "Direct database driver instantiation (sqlite3.connect) inside AuthService constructor instead of injected repository"
+    }
+  ],
+  "file_08.py": [
+    {
+      "principle": "OCP",
+      "line_range": [6, 38],
+      "description": "compute_discount modifies core logic for every customer tier instead of using polymorphism or strategy pattern"
+    },
+    {
+      "principle": "high-complexity",
+      "line_range": [6, 38],
+      "description": "High cyclomatic complexity and deep 4-level nested conditional logic in discount calculation"
+    }
+  ],
+  "file_09.py": [
+    {
+      "principle": "ISP",
+      "line_range": [6, 35],
+      "description": "INotificationHandler forces email notifier to implement SMS, push, and pager methods with NotImplementedError"
+    },
+    {
+      "principle": "long-function",
+      "line_range": [39, 74],
+      "description": "dispatch_batch_notifications is a monolithic 36-line loop doing template interpolation, throttling, and metric compilation"
+    }
+  ],
+  "file_10.py": [
+    {
+      "principle": "SRP",
+      "line_range": [5, 33],
+      "description": "OrderDispatcher mixes warehouse stock deduction, payment charge processing, and logistics shipping manifest generation"
+    },
+    {
+      "principle": "OWASP-BrokenAuth",
+      "line_range": [32, 35],
+      "description": "admin_override_dispatch endpoint lacks role verification, permitting unauthenticated order dispatch"
+    }
+  ],
+  "file_11.py": [
+    {
+      "principle": "poor-naming",
+      "line_range": [13, 23],
+      "description": "Cryptic identifier naming (v, amt, tmp_cap, res_val) in fuel calculation"
+    },
+    {
+      "principle": "LSP",
+      "line_range": [32, 37],
+      "description": "ElectricCar breaks FuelVehicle base class contract by raising NotImplementedError on fill_gasoline"
+    }
+  ],
+  "file_12.py": [
+    {
+      "principle": "OWASP-Injection",
+      "line_range": [10, 15],
+      "description": "Dynamic SQL query string interpolation with unvalidated table_name and tenant_id parameters"
+    },
+    {
+      "principle": "high-complexity",
+      "line_range": [17, 38],
+      "description": "Deeply nested CSV escaping logic and string truncation with high cyclomatic complexity"
+    }
+  ],
+  "file_13.py": [
+    {
+      "principle": "DIP",
+      "line_range": [19, 24],
+      "description": "AnalyticsAggregator directly instantiates concrete Redis and SQLite clients instead of abstract data access interfaces"
+    },
+    {
+      "principle": "long-function",
+      "line_range": [26, 73],
+      "description": "compute_daily_rollups is a monolithic 48-line function handling extraction, filtering, aggregation, and caching"
+    }
+  ],
+  "file_14.py": [
+    {
+      "principle": "SRP",
+      "line_range": [7, 23],
+      "description": "DocumentSigner combines SHA256 cryptographic signing, cloud file URL generation, and billing calculations"
+    },
+    {
+      "principle": "OWASP-BrokenAuth",
+      "line_range": [25, 30],
+      "description": "create_signing_link exposes authentication session token in GET query parameter and logs it to audit output"
+    }
+  ],
+  "file_15.py": [
+    {
+      "principle": "OCP",
+      "line_range": [36, 48],
+      "description": "calculate_total_rate uses isinstance checks on FragilePackage and PerishablePackage subclasses"
+    },
+    {
+      "principle": "high-complexity",
+      "line_range": [22, 51],
+      "description": "Nested shipping zone and package type conditional branches resulting in high cyclomatic complexity"
+    }
+  ],
+  "file_16.py": [
+    {
+      "principle": "ISP",
+      "line_range": [7, 39],
+      "description": "IAuditLogger fat interface bundles file, syslog, cloudwatch, and kafka channels forcing dummy implementations"
+    },
+    {
+      "principle": "OWASP-Injection",
+      "line_range": [27, 31],
+      "description": "Path traversal vulnerability through unvalidated log category string concatenation in os.path.join"
+    }
+  ]
+}
