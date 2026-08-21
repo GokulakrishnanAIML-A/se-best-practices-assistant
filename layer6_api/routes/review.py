@@ -33,10 +33,11 @@ async def review_code(req: ReviewRequest, response: Response) -> ReviewResponse:
             status_code=413, detail="code exceeds 50000 char limit for this MVP"
         )
 
+    logger.info(f"📥 [API POST /review] Received code review request ({len(req.code)} characters)")
     try:
         result = run_review(req.code)
     except Exception as exc:
-        logger.error(f"Error executing code review: {exc}")
+        logger.error(f"❌ Error executing code review: {exc}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Review execution failed: {str(exc)}")
 
     session_id = str(uuid4())
@@ -48,7 +49,9 @@ async def review_code(req: ReviewRequest, response: Response) -> ReviewResponse:
 
     _SESSIONS[session_id] = resp
     response.headers["X-Session-Id"] = session_id
+    logger.info(f"📤 [API POST /review] Completed session {session_id[:8]} with {len(result['findings'])} findings across {result['iteration_count']} iterations.")
     return resp
+
 
 
 @router.post("/{session_id}/decision", response_model=HITLDecisionResponse)

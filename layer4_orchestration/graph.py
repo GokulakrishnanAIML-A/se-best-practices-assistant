@@ -28,9 +28,10 @@ def create_nodes(
     """Factory to create LangGraph state graph nodes with bound dependencies."""
 
     def planner_node(state: ReviewState) -> dict[str, Any]:
-        logger.info("Executing node: planner")
+        logger.info("📋 [1/5 Agent: Planner] Analyzing code requirements and breaking down evaluation claims...")
         code = state.get("code", "")
         sub_claims = plan(code, llm=planner_llm)
+        logger.info(f"📋 [1/5 Agent: Planner] Generated {len(sub_claims)} sub-claims: {sub_claims}")
         return {
             "sub_claims": sub_claims,
             "iteration_count": 0,
@@ -39,13 +40,16 @@ def create_nodes(
         }
 
     def retriever_node(state: ReviewState) -> dict[str, Any]:
-        logger.info("Executing node: retriever")
+        logger.info("🔍 [2/5 Agent: Retriever] Routing claims to hybrid vector/BM25 knowledge base...")
         sub_claims = state.get("sub_claims", [])
         retrieved = retrieve_for_claims(sub_claims, retriever=retriever, k=config.retrieval_k)
+        total_chunks = sum(len(chunks) for chunks in retrieved.values())
+        logger.info(f"🔍 [2/5 Agent: Retriever] Retrieved {total_chunks} authoritative evidence chunks across {len(retrieved)} claims.")
         return {"retrieved": retrieved}
 
     def analyzer_node(state: ReviewState) -> dict[str, Any]:
-        logger.info("Executing node: analyzer")
+        current_iter = state.get("iteration_count", 0) + 1
+        logger.info(f"🔬 [3/5 Agent: Analyzer] Running static tools & generating grounded review (Pass {current_iter})...")
         code = state.get("code", "")
         sub_claims = state.get("sub_claims", [])
         retrieved = state.get("retrieved", {})
@@ -53,6 +57,7 @@ def create_nodes(
         # Compute static tool findings if not already present in state
         tool_findings = state.get("tool_findings")
         if not tool_findings:
+            logger.info("⚡ Executing static analysis suite: AST parser, Bandit security scanner, Radon complexity metrics...")
             structure_res = analyze_structure(code)
             security_res = run_bandit(code)
             complexity_res = analyze_complexity(code)
@@ -69,17 +74,17 @@ def create_nodes(
             tool_findings=tool_findings,
             llm=analyzer_llm,
         )
+        logger.info(f"🔬 [3/5 Agent: Analyzer] Produced {len(draft_review)} candidate findings.")
 
-        current_iter = state.get("iteration_count", 0)
         return {
             "draft_review": draft_review,
             "tool_findings": tool_findings,
             # iteration_count MUST increment in analyzer_node per spec
-            "iteration_count": current_iter + 1,
+            "iteration_count": current_iter,
         }
 
     def reflection_node(state: ReviewState) -> dict[str, Any]:
-        logger.info("Executing node: reflection")
+        logger.info("🧐 [4/5 Agent: Reflection] Auditing findings for groundedness and hallucination suppression...")
         draft_review = state.get("draft_review", [])
         retrieved = state.get("retrieved", {})
         sub_claims = state.get("sub_claims", [])
@@ -90,6 +95,7 @@ def create_nodes(
             sub_claims=sub_claims,
             llm=reflection_llm,
         )
+        logger.info(f"🧐 [4/5 Agent: Reflection] Needs revision: {reflection_res.needs_revision} | Notes: {reflection_res.notes}")
 
         return {
             "reflection_notes": reflection_res.notes,
@@ -97,7 +103,7 @@ def create_nodes(
         }
 
     def reporter_node(state: ReviewState) -> dict[str, Any]:
-        logger.info("Executing node: reporter")
+        logger.info("📊 [5/5 Agent: Reporter] Compiling and formatting final structured review report...")
         draft_review = state.get("draft_review", [])
         return {
             "final_review": draft_review,
@@ -107,11 +113,14 @@ def create_nodes(
         needs_rev = state.get("needs_revision", False)
         iter_count = state.get("iteration_count", 0)
         logger.info(
-            f"Routing check after reflection: needs_revision={needs_rev}, iteration_count={iter_count}, max={config.max_reflection_iterations}"
+            f"🔄 [Routing Decision] Revision needed={needs_rev} | Iteration={iter_count}/{config.max_reflection_iterations}"
         )
         if needs_rev and iter_count < config.max_reflection_iterations:
+            logger.info("🔁 Re-routing to Analyzer for grounded correction cycle...")
             return "analyzer"
+        logger.info("✅ Verification passed. Routing to Reporter.")
         return "reporter"
+
 
     return (
         planner_node,

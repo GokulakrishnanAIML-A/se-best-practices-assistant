@@ -100,38 +100,66 @@ class OfflineMockLLM:
 def get_llm(model_name: str, temperature: float = 0.2) -> Any:
     """Factory to instantiate ChatModel based on model name and available API keys.
 
-    Supports Anthropic, OpenAI, Google Gemini, and offline fallback.
+    Supports Anthropic, OpenAI, Google Gemini, Groq, and offline static-analysis fallback.
     """
-    # 1. Anthropic models
-    if "claude" in model_name.lower() and os.environ.get("ANTHROPIC_API_KEY"):
+    # 1. Groq models (or GROQ_API_KEY present)
+    if os.environ.get("GROQ_API_KEY"):
+        try:
+            from langchain_groq import ChatGroq
+
+            groq_model = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
+            logger.info(f"🤖 Initializing Groq LLM: '{groq_model}' (temp={temperature})")
+            return ChatGroq(model=groq_model, temperature=temperature)
+        except ImportError:
+            try:
+                from langchain_openai import ChatOpenAI
+
+                groq_model = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
+                logger.info(f"🤖 Initializing Groq LLM via OpenAI compatibility: '{groq_model}' (temp={temperature})")
+                return ChatOpenAI(
+                    model=groq_model,
+                    api_key=os.environ.get("GROQ_API_KEY"),
+                    base_url="https://api.groq.com/openai/v1",
+                    temperature=temperature,
+                )
+            except Exception as e:
+                logger.debug(f"Could not load Groq provider: {e}")
+
+    # 2. Anthropic models
+    if ("claude" in model_name.lower() or os.environ.get("ANTHROPIC_MODEL")) and os.environ.get("ANTHROPIC_API_KEY"):
         try:
             from langchain_anthropic import ChatAnthropic
 
+            logger.info(f"🤖 Initializing Anthropic LLM: '{model_name}' (temp={temperature})")
             return ChatAnthropic(model=model_name, temperature=temperature)
         except ImportError:
             logger.debug("langchain-anthropic not installed; attempting alternative provider.")
 
-    # 2. Google Gemini models
-    if "gemini" in model_name.lower() and os.environ.get("GOOGLE_API_KEY"):
+    # 3. Google Gemini models
+    if ("gemini" in model_name.lower() or os.environ.get("GOOGLE_MODEL")) and (os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")):
         try:
             from langchain_google_genai import ChatGoogleGenerativeAI
 
-            g_model = model_name if "gemini" in model_name.lower() else "gemini-1.5-flash"
-            return ChatGoogleGenerativeAI(model=g_model, temperature=temperature)
+            g_model = os.environ.get("GOOGLE_MODEL", model_name if "gemini" in model_name.lower() else "gemini-1.5-flash")
+            api_key = os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")
+            logger.info(f"🤖 Initializing Google Gemini LLM: '{g_model}' (temp={temperature})")
+            return ChatGoogleGenerativeAI(model=g_model, google_api_key=api_key, temperature=temperature)
         except ImportError:
             logger.debug("langchain-google-genai not installed.")
 
-    # 3. OpenAI models
-    if "gpt" in model_name.lower() and os.environ.get("OPENAI_API_KEY"):
+    # 4. OpenAI models
+    if ("gpt" in model_name.lower() or os.environ.get("OPENAI_MODEL")) and os.environ.get("OPENAI_API_KEY"):
         try:
             from langchain_openai import ChatOpenAI
 
-            o_model = model_name if "gpt" in model_name.lower() else "gpt-4o-mini"
+            o_model = os.environ.get("OPENAI_MODEL", model_name if "gpt" in model_name.lower() else "gpt-4o-mini")
+            logger.info(f"🤖 Initializing OpenAI LLM: '{o_model}' (temp={temperature})")
             return ChatOpenAI(model=o_model, temperature=temperature)
         except ImportError:
             logger.debug("langchain-openai not installed.")
 
-    # 4. Fallback Offline/Mock LLM
-    logger.info(f"Using OfflineMockLLM provider for '{model_name}'.")
+    # 5. Fallback Offline/Mock LLM (Static Analysis & Knowledge Base Grounded)
+    logger.info(f"🛡️ Using OfflineMockLLM fallback (Grounded in Bandit, AST, Radon & KB) for requested '{model_name}'.")
     return OfflineMockLLM()
+
 

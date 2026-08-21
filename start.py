@@ -34,7 +34,13 @@ def ensure_knowledge_base():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s | %(levelname)-7s | %(name)s | %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
     ensure_knowledge_base()
     port = int(os.environ.get("PORT", 8000))
-    logger.info(f"Starting SE Best Practices Assistant on port {port}...")
-    uvicorn.run("layer6_api.main:app", host="0.0.0.0", port=port)
+    logger.info(f"🚀 Starting SE Best Practices Assistant on port {port}...")
+    uvicorn.run("layer6_api.main:app", host="0.0.0.0", port=port, log_level="info")
+
