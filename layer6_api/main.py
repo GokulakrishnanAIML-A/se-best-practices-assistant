@@ -24,7 +24,18 @@ app.add_middleware(
 app.include_router(review.router)
 
 
+@app.get("/", tags=["System"])
+async def root() -> dict[str, str]:
+    """Root endpoint providing service metadata and link to docs."""
+    return {
+        "message": "SE Best Practices Assistant API is running.",
+        "docs": "/docs",
+        "health": "/health",
+    }
+
+
 @app.get("/health", tags=["System"])
 async def health_check() -> dict[str, str]:
     """Health check endpoint for container probes and load balancers."""
     return {"status": "ok", "service": "SE Best Practices Assistant API"}
+
