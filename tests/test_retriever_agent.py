@@ -47,15 +47,42 @@ def test_retrieve_for_claims_falls_back_on_empty_source_match():
     assert mock.calls[1]["source"] is None
 
 
-def test_retrieve_for_claims_integrates_with_real_retriever():
-    retriever = KnowledgeRetriever()
+def test_retrieve_for_claims_integrates_with_real_retriever(tmp_path):
+    from layer1_data.types import Chunk
+    from layer1_data.embed_index import build_index
+    from layer1_data.bm25_index import build_bm25
+
+    chunks: list[Chunk] = [
+        Chunk(
+            id="solid_0001",
+            source="solid",
+            title="Single Responsibility",
+            text="Single Responsibility Principle: A class should have only one reason to change.",
+            url="",
+        ),
+        Chunk(
+            id="owasp_0001",
+            source="owasp",
+            title="SQL Injection",
+            text="A03 Injection: SQL injection occurs when untrusted input is passed to dynamic SQL queries without parameterized statements.",
+            url="",
+        ),
+    ]
+
+    chroma_dir = str(tmp_path / "chroma")
+    bm25_file = str(tmp_path / "bm25.pkl")
+    build_index(chunks, persist_dir=chroma_dir)
+    build_bm25(chunks, out_path=bm25_file)
+
+    retriever = KnowledgeRetriever(chroma_dir=chroma_dir, bm25_path=bm25_file)
     claims = [
         "check for SQL injection vulnerabilities",
         "check for Single Responsibility Principle",
     ]
     results = retrieve_for_claims(claims, retriever, k=2)
     assert len(results) == 2
-    for claim, chunks in results.items():
-        assert len(chunks) > 0
-        assert "id" in chunks[0]
-        assert "text" in chunks[0]
+    for claim, res_chunks in results.items():
+        assert len(res_chunks) > 0
+        assert "id" in res_chunks[0]
+        assert "text" in res_chunks[0]
+
