@@ -20,15 +20,17 @@ def ensure_knowledge_base():
         logger.info("Initializing knowledge base indexes from raw documentation...")
         try:
             from layer1_data.ingest import ingest_all
-            from layer1_data.embed_index import build_index
-            from layer1_data.bm25_index import build_bm25_index
+            from layer1_data.embed_index import build_index, load_all_chunks
+            from layer1_data.bm25_index import build_bm25
 
-            ingest_all(raw_dir=raw_dir, processed_dir=processed_dir)
-            build_index(processed_dir=processed_dir, persist_dir=chroma_dir)
-            build_bm25_index(processed_dir=processed_dir, out_path=bm25_file)
+            ingest_all(raw_dir=raw_dir, out_dir=processed_dir)
+            chunks = load_all_chunks(processed_dir=str(processed_dir))
+            build_index(chunks=chunks, persist_dir=str(chroma_dir))
+            build_bm25(chunks=chunks, out_path=str(bm25_file))
             logger.info("Knowledge base indexes successfully initialized!")
         except Exception as exc:
             logger.error(f"Failed to build knowledge base indexes: {exc}", exc_info=True)
+
 
 
 if __name__ == "__main__":

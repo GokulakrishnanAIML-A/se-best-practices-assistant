@@ -68,6 +68,11 @@ def build_bm25(
     return bm25_obj
 
 
+# Backwards compatibility alias
+build_bm25_index = build_bm25
+
+
+
 def load_bm25_index(index_path: str = DEFAULT_BM25_PATH):
     """Load BM25 tuple from disk with in-memory caching."""
     resolved_path = str(Path(index_path).resolve())
